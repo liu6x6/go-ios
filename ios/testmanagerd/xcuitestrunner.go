@@ -432,26 +432,11 @@ func startTestRunner17(appserviceConn *appservice.Connection, bundleID string, s
 		args = append(args, arg)
 	}
 
-	libraries := "/Developer/usr/lib/libMainThreadChecker.dylib"
-	if isXCTest {
-		libraries += ":/System/Developer/usr/lib/libXCTestBundleInject.dylib"
-	}
-
 	env := map[string]interface{}{
-		"CA_ASSERT_MAIN_THREAD_TRANSACTIONS": "0",
-		"CA_DEBUG_TRANSACTIONS":              "0",
-		"DYLD_INSERT_LIBRARIES":              libraries,
-		"DYLD_FRAMEWORK_PATH":                "/System/Developer/Library/Frameworks",
-		"DYLD_LIBRARY_PATH":                  "/System/Developer/usr/lib",
 
-		"MTC_CRASH_ON_REPORT":             "1",
-		"NSUnbufferedIO":                  "YES",
-		"OS_ACTIVITY_DT_MODE":             "YES",
-		"SQLITE_ENABLE_THREAD_ASSERTIONS": "1",
-		"XCTestBundlePath":                testBundlePath,
-		"XCTestConfigurationFilePath":     "",
-		"XCTestManagerVariant":            "DDI",
-		"XCTestSessionIdentifier":         strings.ToUpper(sessionIdentifier),
+		// "XCTestBundlePath": testBundlePath,
+
+		// "XCTestSessionIdentifier": strings.ToUpper(sessionIdentifier),
 	}
 
 	if len(testEnv) > 0 {

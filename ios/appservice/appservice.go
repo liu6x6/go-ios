@@ -248,7 +248,7 @@ func buildAppLaunchPayload(deviceId string, bundleId string, args []interface{},
 		},
 		"options": map[string]interface{}{
 			"arguments":                     args,
-			"environmentVariables":          env,
+			"environmentVariables":          map[string]interface{}{},
 			"platformSpecificOptions":       platformSpecificOptions.Bytes(),
 			"standardIOUsesPseudoterminals": true,
 			"startStopped":                  false,
@@ -256,7 +256,6 @@ func buildAppLaunchPayload(deviceId string, bundleId string, args []interface{},
 			"user": map[string]interface{}{
 				"active": true,
 			},
-			"workingDirectory": nil,
 		},
 		"standardIOIdentifiers": stdIo,
 	})

@@ -8,7 +8,7 @@ func BuildRequest(deviceId, feature string, input map[string]interface{}) map[st
 		"CoreDevice.CoreDeviceDDIProtocolVersion": int64(0),
 		"CoreDevice.action":                       map[string]interface{}{},
 		"CoreDevice.coreDeviceVersion": map[string]interface{}{
-			"components":              []interface{}{uint64(0x15c), uint64(0x1), uint64(0x0), uint64(0x0), uint64(0x0)},
+			"components":              []interface{}{},
 			"originalComponentsCount": int64(2),
 			"stringValue":             "348.1",
 		},
