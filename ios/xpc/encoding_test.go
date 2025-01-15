@@ -3,11 +3,14 @@ package xpc
 import (
 	"bytes"
 	"encoding/base64"
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
+	"encoding/hex"
+	"fmt"
 	"os"
 	"path"
 	"testing"
+
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestEmptyDictionary(t *testing.T) {
@@ -163,4 +166,80 @@ func TestEncodeDecode(t *testing.T) {
 			assert.Equal(t, tt.expectedFlags, res.Flags)
 		})
 	}
+}
+
+func TestDictionary2(t *testing.T) {
+	b, _ := os.ReadFile("/Users/xiao/packets/utun7-go1/13.bin")
+
+	byteArray := []byte{
+		0x1f, 0xc2, 0x86, 0x84, 0x67, 0xd9, 0x4c, 0xff, 0x9f,
+		0x06, 0x10, 0xf7, 0x02, 0xd9, 0x5b, 0x13,
+	}
+	uuidObj, err1 := uuid.FromBytes(byteArray)
+
+	hexString := "bplist00\xd3\x01\x02\x03\x04\x05\x04_\x10\x11ActivateSuspended_\x10\x11StartSuspendedKey_\x10\x13__ActivateSuspended\x10\x01\x10\x00\b\x0f#7MO\x00\x00\x00\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00Q"
+	optionsByte, err2 := hex.DecodeString(hexString)
+
+	if err1 != nil {
+		fmt.Println("Error creating UUID:", err1)
+	}
+	if err2 != nil {
+		fmt.Println("Error creating UUID:", err2)
+	}
+
+	res, err := DecodeMessage(bytes.NewReader(b))
+	assert.NoError(t, err)
+	assert.Equal(t, Message{
+		Flags: AlwaysSetFlag | DataFlag | HeartbeatRequestFlag,
+		Body: map[string]interface{}{
+			"CoreDevice.CoreDeviceDDIProtocolVersion": int64(0),
+			"CoreDevice.action":                       map[string]interface{}{},
+			"CoreDevice.coreDeviceVersion": map[string]interface{}{
+				"components":              []interface{}{uint64(0x15c), uint64(0x1), uint64(0x0), uint64(0x0), uint64(0x0)},
+				"originalComponentsCount": int64(2),
+				"stringValue":             "348.1",
+			},
+			"CoreDevice.deviceIdentifier":  "54e0066e-0512-48af-8a58-21c18058eb1d",
+			"CoreDevice.featureIdentifier": "com.apple.coredevice.feature.launchapplication",
+			"CoreDevice.input": map[string]interface{}{
+				"applicationSpecifier": map[string]interface{}{
+					"bundleIdentifier": map[string]interface{}{
+						"_0": "com.apple.test.WebDriverAgentRunner-Runner",
+					},
+				},
+				"options": map[string]interface{}{
+					"arguments": []interface{}{},
+					"environmentVariables": map[string]interface{}{
+						"CA_ASSERT_MAIN_THREAD_TRANSACTIONS": "0",
+						"CA_DEBUG_TRANSACTIONS":              "0",
+						"DYLD_INSERT_LIBRARIES":              "/Developer/usr/lib/libMainThreadChecker.dylib",
+						"DYLD_FRAMEWORK_PATH":                "/System/Developer/Library/Frameworks",
+						"DYLD_LIBRARY_PATH":                  "/System/Developer/usr/lib",
+						"MTC_CRASH_ON_REPORT":                "1",
+						"NSUnbufferedIO":                     "YES",
+						"OS_ACTIVITY_DT_MODE":                "YES",
+						"SQLITE_ENABLE_THREAD_ASSERTIONS":    "1",
+						"XCTestBundlePath":                   "/private/var/containers/Bundle/Application/77EF4F4D-D2C1-4B6A-AAB6-22305FA8AE8E/WebDriverAgentRunner-Runner.app/PlugIns/WebDriverAgentRunner.xctest",
+						"XCTestConfigurationFilePath":        "",
+						"XCTestManagerVariant":               "DDI",
+						"XCTestSessionIdentifier":            "C7792F5B-B00F-4C47-B721-C9815F02EE29",
+					},
+					"platformSpecificOptions":       optionsByte,
+					"standardIOUsesPseudoterminals": true,
+					"startStopped":                  false,
+					"terminateExisting":             true,
+					"user": map[string]interface{}{
+						"active": true,
+					},
+					"workingDirectory": nil,
+				},
+				"standardIOIdentifiers": map[string]interface{}{
+					"standardInput":  uuidObj,
+					"standardOutput": uuidObj,
+					"standardError":  uuidObj,
+				},
+			},
+			"CoreDevice.invocationIdentifier": "80aea1e4-ccf8-4344-8452-ed3b68d5425d",
+		},
+	}, res)
 }
