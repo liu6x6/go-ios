@@ -9,7 +9,7 @@ func BuildRequest(deviceId, feature string, input map[string]interface{}) map[st
 		"CoreDevice.action":                       map[string]interface{}{},
 		"CoreDevice.coreDeviceVersion": map[string]interface{}{
 			"components":              []interface{}{},
-			"originalComponentsCount": int64(2),
+			"originalComponentsCount": int64(0),
 			"stringValue":             "348.1",
 		},
 		"CoreDevice.deviceIdentifier":     deviceId,

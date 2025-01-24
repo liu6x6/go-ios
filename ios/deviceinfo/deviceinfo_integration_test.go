@@ -13,6 +13,8 @@ import (
 )
 
 func TestGetDisplayInfos(t *testing.T) {
+	os.Setenv("GO_IOS_RSD_PORT", "63254")
+	os.Setenv("GO_IOS_ADDRESS", "fdca:8409:25ba::1")
 	rsdPort, err := strconv.Atoi(os.Getenv("GO_IOS_RSD_PORT"))
 	require.NoError(t, err)
 	address := os.Getenv("GO_IOS_ADDRESS")
