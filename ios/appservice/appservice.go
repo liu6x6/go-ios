@@ -232,6 +232,10 @@ func (p Process) ExecutableName() string {
 	return file
 }
 
+func BuildAppLaunchPayload(deviceId string, bundleId string, args []interface{}, env map[string]interface{}, options map[string]interface{}, terminateExisting bool, stdIo map[string]any) map[string]interface{} {
+	return buildAppLaunchPayload(deviceId, bundleId, args, env, options, terminateExisting, stdIo)
+}
+
 func buildAppLaunchPayload(deviceId string, bundleId string, args []interface{}, env map[string]interface{}, options map[string]interface{}, terminateExisting bool, stdIo map[string]any) map[string]interface{} {
 	platformSpecificOptions := bytes.NewBuffer(nil)
 	plistEncoder := plist.NewBinaryEncoder(platformSpecificOptions)
@@ -248,7 +252,7 @@ func buildAppLaunchPayload(deviceId string, bundleId string, args []interface{},
 		},
 		"options": map[string]interface{}{
 			"arguments":                     args,
-			"environmentVariables":          map[string]interface{}{},
+			"environmentVariables":          env,
 			"platformSpecificOptions":       platformSpecificOptions.Bytes(),
 			"standardIOUsesPseudoterminals": true,
 			"startStopped":                  false,

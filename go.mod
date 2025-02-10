@@ -29,6 +29,11 @@ require (
 )
 
 require (
+	github.com/jessevdk/go-flags v1.5.0 // indirect
+	github.com/sweetbbak/hexxy v0.0.0-20240929202418-36174e436f9d // indirect
+)
+
+require (
 	github.com/cenkalti/backoff v2.2.1+incompatible // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/elazarl/goproxy v0.0.0-20240726154733-8b0c20506380

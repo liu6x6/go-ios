@@ -535,6 +535,11 @@ func encodeUuid(w io.Writer, u uuid.UUID) error {
 
 func encodeArray(w io.Writer, slice []interface{}) error {
 	buf := bytes.NewBuffer(nil)
+	err := binary.Write(buf, binary.LittleEndian, uint32(len(slice)))
+	if err != nil {
+		return fmt.Errorf("encodeArray: failed to write number of array entries: %w", err)
+	}
+
 	for i, e := range slice {
 		if err := encodeObject(buf, e); err != nil {
 			return fmt.Errorf("encodeArray: failed to encode array object at index %d: %w", i, err)
@@ -542,10 +547,9 @@ func encodeArray(w io.Writer, slice []interface{}) error {
 	}
 
 	header := struct {
-		t          xpcType
-		l          uint32
-		numObjects uint32
-	}{arrayType, uint32(buf.Len()), uint32(len(slice))}
+		t xpcType
+		l uint32
+	}{arrayType, uint32(buf.Len())}
 	if err := binary.Write(w, binary.LittleEndian, header); err != nil {
 		return fmt.Errorf("encodeArray: failed to write array header: %w", err)
 	}
