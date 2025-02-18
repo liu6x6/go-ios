@@ -60,6 +60,30 @@ func TestXCTestconfig(t *testing.T) {
 	log.Info(unarchivedObject)
 }
 
+func TestXCTTestIdentifier(t *testing.T) {
+	nskeyedBytes, err := os.ReadFile("/Users/xiao/Desktop/XCTTestIdentifier.a.plist")
+	if err != nil {
+		log.Error(err)
+		t.Fatal()
+	}
+
+	unarchivedObject, err := archiver.Unarchive(nskeyedBytes)
+	assert.NoError(t, err)
+	log.Info(unarchivedObject)
+	arr := []string{"All Test"}
+	a := archiver.XCTTestIdentifier{
+		O: uint64(1),
+		C: arr}
+	data, _ := archiver.ArchiveBin(a)
+	log.Info(data)
+
+	oo := hex.Dump(data)
+	println(oo)
+
+	os.WriteFile("/Users/xiao/Desktop/go-XCTTestIdentifier.bin", data, 0644)
+
+}
+
 func TestXCTCaps(t *testing.T) {
 	nskeyedBytes, err := os.ReadFile("fixtures/XCTCapabilities.bin")
 	if err != nil {
